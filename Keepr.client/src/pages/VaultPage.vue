@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <h1>{{ vault.name }}</h1>
+    <!-- TODO make sure to set up deleting a vaultKeep here.  -->
+    <!-- <h1>{{ vault.name }}</h1> -->
     <div class="masonry-with-columns">
       <div v-for="k in vaultKeeps" :key="k.id">
         <Keep :keep="k" />
@@ -17,12 +18,15 @@ import Pop from '../utils/Pop.js';
 import { logger } from '../utils/Logger.js';
 import { keepsService } from '../services/KeepsService.js';
 import { AppState } from '../AppState.js';
+import { vaultsService } from '../services/VaultsService.js';
 export default {
   setup() {
     const route = useRoute();
     onMounted(async () => {
       try {
+        //   await vaultsService
         await keepsService.getVaultKeeps(route.params.id);
+        // TODO - Once your tests are passing and your server rejects a user trying to access another users private vaults, Think about what the catch below is doing. What is it that you want to do with the user if this request fails?
       } catch (error) {
         logger.error(error)
         Pop.toast(error.message, 'error')

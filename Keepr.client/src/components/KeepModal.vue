@@ -40,6 +40,7 @@
         </div>
       </div>
     </template>
+    <!-- TODO check the reference code I sent you - but we will need a dropdown here that displays all of the logged in users vaults. Then I'll leave it up to you to handle the functional side of it.  -->
   </Modal>
 </template>
 
