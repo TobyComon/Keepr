@@ -45,8 +45,10 @@ export default {
       },
       setActive() {
         try {
+          // TODO this is a valid way of handling setting up your keep modal but it makes updating the view count a little trickier. If you switch this to a get keep by Id api call, then you will need to adjust your SQL statement like we discussed
           AppState.activeKeep = props.keep
           Modal.getOrCreateInstance(document.getElementById('keep-modal')).show()
+          // EDIT KEEP api call - and it's main purpose is to update view count. AppState.activeKeep.views++ THEN call edit keep
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')

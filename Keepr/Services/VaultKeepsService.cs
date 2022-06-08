@@ -16,6 +16,7 @@ namespace Keepr.Services
 
         internal VaultKeep Create(VaultKeep newVaultKeep)
         {
+            // TODO you need to make sure that a user cant add a keep to another users vaults. SO - at this point we should have direct access to the vaultId, which we can use to go get that particular vault by its ID. Then we should check to see if that vault is ours.....
             return _vkrepo.Create(newVaultKeep);
         }
 
@@ -31,6 +32,7 @@ namespace Keepr.Services
 
         internal void Delete(int id)
         {
+            // TODO see above - we aren't checking user identity
             Get(id);
             _vkrepo.Delete(id);
         }

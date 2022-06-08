@@ -59,6 +59,8 @@ namespace Keepr.Controllers
         {
             try
             {
+                // TODO currently, a non logged in user can get all keeps in a private vault. SO we need to make sure that the person logged in is the same person that created the private vault. So you will need info off of the person that is logged in - currently this route is not authorized. Think about an operator that allows you to null check a property. ? 
+                // Make sure to pass in that users info (if it exists) and in the service layer you will need to make the check. 
                 List<VaultKeepViewModel> keeps = _vks.GetKeeps(id, userId);
                 return Ok(keeps);
             }
