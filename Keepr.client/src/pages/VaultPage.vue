@@ -13,7 +13,7 @@
 
 <script>
 import { computed, onMounted } from '@vue/runtime-core';
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import Pop from '../utils/Pop.js';
 import { logger } from '../utils/Logger.js';
 import { keepsService } from '../services/KeepsService.js';
@@ -22,12 +22,14 @@ import { vaultsService } from '../services/VaultsService.js';
 export default {
   setup() {
     const route = useRoute();
+    const router = useRouter();
     onMounted(async () => {
       try {
         //   await vaultsService
         await keepsService.getVaultKeeps(route.params.id);
         // TODO - Once your tests are passing and your server rejects a user trying to access another users private vaults, Think about what the catch below is doing. What is it that you want to do with the user if this request fails?
       } catch (error) {
+        router.push()
         logger.error(error)
         Pop.toast(error.message, 'error')
       }

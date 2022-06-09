@@ -13,12 +13,20 @@
   </div>
 
   <div class="container-fluid">
+    <h1>Vaults:</h1>
     <div v-for="v in vaults" :key="v.id">
       <Vault :vault="v" />
     </div>
   </div>
 
   <div class="container">
+    <h1>Keeps:</h1>
+    <i class="mdi mdi-plus mdi-48px" @click="openModal"></i>
+    <Modal id="newKeepModal">
+      <template #modal-body>
+        <KeepForm />
+      </template>
+    </Modal>
     <div class="masonry-with-columns">
       <div v-for="k in keeps" :key="k.id">
         <Keep :keep="k" />
@@ -35,7 +43,8 @@ import Pop from '../utils/Pop.js'
 import { logger } from '../utils/Logger.js'
 import { AppState } from '../AppState.js'
 import { profilesService } from '../services/ProfilesService.js'
-import Vault from '../components/Vault.vue'
+import { Modal } from 'bootstrap'
+
 export default {
   setup() {
     const route = useRoute();
@@ -53,10 +62,14 @@ export default {
       keeps: computed(() => AppState.profileKeeps),
       vaults: computed(() => AppState.profileVaults),
       keepCount: computed(() => AppState.profileKeeps.length),
-      vaultCount: computed(() => AppState.profileVaults.length)
+      vaultCount: computed(() => AppState.profileVaults.length),
+      openModal() {
+
+        Modal.getOrCreateInstance(document.getElementById("newKeepModal")).toggle();
+      }
     };
   },
-  components: { Vault }
+
 }
 </script>
 

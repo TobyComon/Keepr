@@ -36,6 +36,27 @@
               </div>
               <p class="mt-3">{{ keep.description }}</p>
             </div>
+            <!-- TODO check if in users vault -->
+            <div v-if="keep.vaultKeepId">
+              <button class="btn btn-outline-primary" @click="remove">
+                REMOVE FROM VAULT
+              </button>
+            </div>
+            <div class="text-start" v-else>
+              <select
+                class="form-control"
+                name="vault"
+                id="vault"
+                v-model="vaultId"
+              >
+                <option v-for="v in vaults" :key="v.id" :value="v.id">
+                  {{ v.name }}
+                </option>
+              </select>
+              <button class="btn btn-outline-success ease-in-out" @click="add">
+                ADD TO VAULT
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -46,13 +67,49 @@
 
 
 <script>
-import { computed } from '@vue/reactivity'
+import { computed, ref } from '@vue/reactivity'
 import { AppState } from '../AppState.js'
+import Pop from '../utils/Pop.js'
+import { logger } from '../utils/Logger.js'
+import { vaultKeepsService } from '../services/VaultKeepsService.js'
 export default {
-  setup() {
+  props: {
+    keep: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
+    const vaultId = ref(0)
 
     return {
+      vaultId,
       keep: computed(() => AppState.activeKeep),
+      vaults: computed(() => AppState.profileVaults),
+
+      async add() {
+        try {
+          const newVk = { keepId: props.keep.id, vaultId: vaultId.value }
+          await vaultKeepsService.add(newVk)
+          vaultId.value = 0
+          Pop.toast("Added")
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      },
+
+      async remove() {
+        try {
+          if (await Pop.confirm()) {
+            await vaultKeepsService.remove(props.keep.vaultKeepId)
+            Pop.toast("Removed")
+          }
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      }
 
     }
   }

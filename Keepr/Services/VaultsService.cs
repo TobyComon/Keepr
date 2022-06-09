@@ -9,6 +9,9 @@ namespace Keepr.Services
     {
         private readonly VaultsRepository _vaultsrepo;
         private readonly KeepsRepository _keepsrepo;
+        // private List<Vault> found;
+        private List<Vault> pubFound;
+        // private List<Vault> prvFound;
 
         public VaultsService(VaultsRepository vaultsrepo, KeepsRepository keepsrepo)
         {
@@ -38,7 +41,7 @@ namespace Keepr.Services
             // NOTE handles if no Vault
             if (found == null)
             {
-                throw new Exception("Group not found");
+                throw new Exception("Vault not found");
             }
             // NOTE handles if vault is private and you are not the creator
             if (found.IsPrivate && found.CreatorId != userId)
@@ -54,7 +57,24 @@ namespace Keepr.Services
 
         internal List<Vault> GetVaultsByCreatorId(string id)
         {
-            return _vaultsrepo.GetById(id);
+            List<Vault> vaults = _vaultsrepo.GetById(id);
+            pubFound = vaults.FindAll(v => v.IsPrivate == false);
+            return pubFound;
+
+
+
+            // if (vaults == null)
+            // {
+            //     throw new Exception("No vaults found");
+            // }
+            // if (vaults[0].IsPrivate && vaults[0].CreatorId != id)
+            // {
+            //     throw new Exception("ACCESS DENIED PUNK");
+            // }
+
+
+
+
         }
 
         internal List<Vault> GetByCreatorId(string id)

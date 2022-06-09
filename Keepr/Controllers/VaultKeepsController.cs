@@ -38,11 +38,12 @@ namespace Keepr.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public ActionResult<string> Delete(int id)
+        public async Task<ActionResult<string>> Delete(int id)
         {
             try
             {
-                _vks.Delete(id);
+                Profile profile = await HttpContext.GetUserInfoAsync<Profile>();
+                _vks.Delete(id, profile.Id);
                 return Ok("Delete Successful");
             }
             catch (Exception e)

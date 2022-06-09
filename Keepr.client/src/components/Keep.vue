@@ -28,6 +28,7 @@ import { logger } from '../utils/Logger.js'
 import Pop from '../utils/Pop.js'
 import { computed } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
+import { keepsService } from '../services/KeepsService.js'
 export default {
   props: {
     keep: {
@@ -46,7 +47,8 @@ export default {
       setActive() {
         try {
           // TODO this is a valid way of handling setting up your keep modal but it makes updating the view count a little trickier. If you switch this to a get keep by Id api call, then you will need to adjust your SQL statement like we discussed
-          AppState.activeKeep = props.keep
+          // AppState.activeKeep = props.keep
+          keepsService.getKeepById(props.keep.id)
           Modal.getOrCreateInstance(document.getElementById('keep-modal')).show()
           // EDIT KEEP api call - and it's main purpose is to update view count. AppState.activeKeep.views++ THEN call edit keep
         } catch (error) {

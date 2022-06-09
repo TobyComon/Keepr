@@ -31,6 +31,9 @@ namespace Keepr.Repositories
         {
             // TODO we can make two separate SQL statements in one string - so think about how you would UPDATE a keep before getting it. Make sure to separate the two queries with a semicolon . 
             string sql = @"
+            UPDATE keeps
+            SET views = views + 1
+            WHERE id = @Id;
             SELECT
             a.*,
             k.*
