@@ -27,7 +27,7 @@ AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async function () {
   AppState.user = AuthService.user
   await accountService.getAccount()
   socketService.authenticate(AuthService.bearer)
-  await vaultsService.getVaultsByProfileId(AppState.account.id)
+  await accountService.getMyVaults()
   // TODO wouldn't it be nice if we could ensure we always get the logged in users vaults whenever the page loads................. check out amaZen and how Mark added products to warehouses
   // NOTE if there is something you want to do once the user is authenticated, place that here
 })

@@ -37,12 +37,12 @@
               <p class="mt-3">{{ keep.description }}</p>
             </div>
             <!-- TODO check if in users vault -->
-            <div v-if="keep.vaultKeepId">
+            <div v-if="keep.creatorId == account.id && keep.vaultKeepId">
               <button class="btn btn-outline-primary" @click="remove">
                 REMOVE FROM VAULT
               </button>
             </div>
-            <div class="text-start" v-else>
+            <div class="text-start" v-else-if="account.id">
               <select
                 class="form-control"
                 name="vault"
@@ -57,6 +57,13 @@
                 ADD TO VAULT
               </button>
             </div>
+            <button
+              @click="deleteKeep"
+              v-if="keep.creatorId == account.id"
+              class="btn btn-danger"
+            >
+              <i class="mdi mdi-trash-can-outline mdi-24px"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -72,27 +79,53 @@ import { AppState } from '../AppState.js'
 import Pop from '../utils/Pop.js'
 import { logger } from '../utils/Logger.js'
 import { vaultKeepsService } from '../services/VaultKeepsService.js'
+import { router } from '../router.js'
+import { Modal } from 'bootstrap'
+import { keepsService } from '../services/KeepsService.js'
 export default {
-  props: {
-    keep: {
-      type: Object,
-      required: true
-    }
-  },
-  setup(props) {
+  // props: {
+  //   keep: {
+  //     type: Object,
+  //     required: true
+  //   }
+  // },
+  setup() {
     const vaultId = ref(0)
 
     return {
       vaultId,
+      account: computed(() => AppState.account),
       keep: computed(() => AppState.activeKeep),
-      vaults: computed(() => AppState.profileVaults),
+      vaults: computed(() => AppState.myVaults),
+      inUserVault: computed(() => {
+
+        // is user logged in
+        // if name of route is 'vault'
+        // && if route params id is in profile vaults
+
+      }),
 
       async add() {
         try {
-          const newVk = { keepId: props.keep.id, vaultId: vaultId.value }
+          const newVk = { keepId: AppState.activeKeep.id, vaultId: vaultId.value }
           await vaultKeepsService.add(newVk)
+          Pop.toast("Added", 'success')
+          Modal.getOrCreateInstance(document.getElementById('keep-modal')).hide()
+          router.push({ name: 'Vault', params: { id: vaultId.value } })
           vaultId.value = 0
-          Pop.toast("Added")
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      },
+
+      async deleteKeep() {
+        try {
+          if (await Pop.confirm()) {
+            await keepsService.remove(AppState.activeKeep.id)
+            Modal.getOrCreateInstance(document.getElementById('keep-modal')).hide()
+            Pop.toast('Removed', 'success')
+          }
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
@@ -102,8 +135,9 @@ export default {
       async remove() {
         try {
           if (await Pop.confirm()) {
-            await vaultKeepsService.remove(props.keep.vaultKeepId)
-            Pop.toast("Removed")
+            await vaultKeepsService.remove(AppState.activeKeep.vaultKeepId)
+            Modal.getOrCreateInstance(document.getElementById('keep-modal')).hide()
+            Pop.toast("Removed", 'success')
           }
         } catch (error) {
           logger.error(error)

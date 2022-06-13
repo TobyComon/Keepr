@@ -4,8 +4,9 @@
       <div class="d-flex flex-column align-items-center">
         <img
           alt="logo"
-          src="src/assets/img/Screen Shot 2022-06-05 at 17.50.06.png"
-          height="45"
+          src="src/assets/img/Keepr.png"
+          height="150"
+          width="150"
         />
       </div>
     </router-link>

@@ -10,9 +10,10 @@ class KeepsService {
         AppState.keeps = res.data
     }
 
-    async getKeepById(id) {
-        const res = await api.get('api/keeps/' + id)
-        AppState.activeKeep = res.data
+    async getKeepById(keep) {
+        const res = await api.get('api/keeps/' + keep.id)
+        keep.views++
+        AppState.activeKeep = keep
     }
     async getVaultKeeps(id) {
         const res = await api.get(`api/vaults/${id}/keeps`)

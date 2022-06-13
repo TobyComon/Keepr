@@ -46,14 +46,14 @@ namespace Keepr.Repositories
             }, new { id }).FirstOrDefault();
         }
 
-        internal void Delete(int id, int foundVK)
+        internal void Delete(int id, int keepId)
         {
             string sql = @"
             UPDATE keeps
             SET kept = kept - 1
             WHERE id = @keepId;
             DELETE FROM vaultkeeps WHERE id = @id";
-            _db.Execute(sql, new { id });
+            _db.Execute(sql, new { id, keepId });
         }
 
         internal List<VaultKeepViewModel> GetKeeps(int vaultId, string userId)

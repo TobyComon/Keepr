@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form @submit.prevent="create" id="keepForm" class="text-center">
+    <form @submit.prevent="create" id="vaultForm" class="text-center">
       <div class="mb-3">
         <label for="name" class="form-label"></label>
         <input
@@ -23,19 +23,27 @@
           aria-describedby="helpId"
           placeholder="URL..."
           v-model="editable.img"
-          required
         />
       </div>
-      <div class="mb-3">
-        <label for="description" class="form-label"></label>
+      <div class="text-start mb-3 form-check">
+        <label for="isPrivate" class="form-label"
+          >Private? <br />
+          <figure class="text-start mt-3">
+            <figcaption class="blockquote-footer">
+              <cite title="Private Vaults can only be seen by you "
+                >Private Vaults can only be seen by you
+              </cite>
+            </figcaption>
+          </figure>
+        </label>
 
-        <textarea
-          name="description"
-          id="description"
-          cols="30"
-          rows="10"
-          v-model="editable.description"
-        ></textarea>
+        <input
+          type="checkbox"
+          class="me-4 form-check-input"
+          name="isPrivate"
+          id="isPrivate"
+          v-model="editable.isPrivate"
+        />
       </div>
       <button class="btn btn-success" type="submit">Submit</button>
     </form>
@@ -48,7 +56,7 @@ import { ref } from '@vue/reactivity'
 import { useRouter } from 'vue-router';
 import Pop from '../utils/Pop.js';
 import { logger } from '../utils/Logger.js';
-import { keepsService } from '../services/KeepsService.js';
+import { vaultsService } from '../services/VaultsService.js';
 import { Modal } from 'bootstrap';
 export default {
   setup() {
@@ -58,8 +66,8 @@ export default {
       editable,
       async create() {
         try {
-          await keepsService.create(editable.value)
-          Modal.getOrCreateInstance(document.getElementById('newKeepModal')).hide()
+          await vaultsService.create(editable.value)
+          Modal.getOrCreateInstance(document.getElementById("newVaultModal")).toggle();
 
         } catch (error) {
           logger.error(error)
