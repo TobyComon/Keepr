@@ -112,10 +112,11 @@ body {
   columns: 4 200px;
   column-gap: 1rem;
   div {
-    width: 100%;
+    width: 150px;
     margin: 0 1rem 1rem 0;
     display: inline-block;
     break-inside: avoid;
+    width: 100%;
     // display: inline-flex;
     // flex-direction: row;
     // flex-wrap: wrap;

@@ -23,7 +23,7 @@
                 <img
                   title="Times Kept"
                   class="keep"
-                  src="src/assets/img/Keep.png"
+                  src="/src/assets/img/Keep.png"
                   alt=""
                 />
                 <h5 class="mt-3 ms-2">{{ keep.kept }}</h5>

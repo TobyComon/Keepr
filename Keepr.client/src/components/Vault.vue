@@ -1,15 +1,15 @@
 <template>
-  <div class="vault shadow my-2 selectable" @click="goToVault">
+  <div class="vault shadow my-2 mx-3 selectable p-0" @click="goToVault">
     <div class="vaultt">
       <img
         v-if="vault.image != null"
-        class="card rounded img-fluid shadow"
+        class="img-fluid shadow"
         :src="vault.image"
         alt=""
       />
       <img
         v-else
-        class="rounded img-fluid shadow"
+        class="img-fluid shadow rounded-2"
         src="https://thiscatdoesnotexist.com"
         alt=""
       />
@@ -49,6 +49,7 @@ export default {
 <style lang="scss" scoped>
 .vaultt {
   position: relative;
+  // border-radius: 50%;
   //   text-align: center;
 }
 
